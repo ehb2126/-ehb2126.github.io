@@ -58,3 +58,22 @@ if ("IntersectionObserver" in window) {
 document.querySelectorAll("[data-current-year]").forEach((element) => {
   element.textContent = String(new Date().getFullYear());
 });
+
+const emailLink = document.querySelector("[data-email-link]");
+const emailDisplay = document.querySelector("[data-email-display]");
+
+if (emailLink) {
+  // Assemble the address only in the visitor's browser so it is not exposed
+  // as a complete email address or mailto link in the static page source.
+  const addressCodes = [101, 104, 98, 50, 49, 50, 54, 64, 103, 109, 97, 105, 108, 46, 99, 111, 109];
+  const address = String.fromCharCode(...addressCodes);
+
+  if (emailDisplay) {
+    emailDisplay.textContent = address.replace("@", " [at] ").replace(".", " [dot] ");
+  }
+
+  emailLink.addEventListener("click", (event) => {
+    event.preventDefault();
+    window.location.href = `mailto:${address}`;
+  });
+}
